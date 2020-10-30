@@ -60,19 +60,22 @@ def insertion_sort(items):
     """Sort given items by taking first unsorted item, inserting it in sorted
     order in front of items, and repeating until all items are in order.
     TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Memory usage: Peak of 9.6e-05MB using short array length of 4"""
     # TODO: Repeat until all items are in sorted order
-    # while is_sorted(items) == False:
-    # TODO: Take first unsorted item
-    for i in range(len(items)):
-        for j in range(len(items) - 1):
-            if items[j + 1] < items[j]:
-                # TODO: Insert it in sorted order in front of items
-                items.insert(0, items[j + 1])
-                items.pop(j + 1)
+    while is_sorted(items) == False:
+        # TODO: Take first unsorted item
+        for i in range(len(items)):
+            # takes i as our first unsorted item
+            for j in range(len(items) - 1):
+                # if the our next index is less then our current
+                if items[j + 1] < items[j]:
+                    # TODO: Insert it in sorted order in front of items
+                    items.insert(0, items[j + 1])
+                    # and remove it so it doesn't repeat in the list
+                    items.pop(j + 2)
     return items
 
-test = [3, -1, 1, -5]
+test = [3, -1, -2, -5]
 print(insertion_sort(test))
 # this is used to track our memory usage
 tracemalloc.start()
