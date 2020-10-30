@@ -38,25 +38,21 @@ def bubble_sort(items):
 def selection_sort(items):
     """Sort given items by finding minimum item, swapping it with first
     unsorted item, and repeating until all items are in sorted order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Running time: O(n)^2 due to nested for loop and dependency of length of list
+    TODO: Memory usage: Peak of 9.6e-05MB using short array length of 4"""
     # TODO: Repeat until all items are in sorted order
-    # while is_sorted(items) == False:
-    # checks the first index
-    min = items[0]
-    count = 0
-    for i in range(count, len(items)):
+    while is_sorted(items) == False:
         # TODO: Find minimum item in unsorted items
-        for j in range(len(items)):
-        # if item's value is lower than min
-            if items[j] < min:
-                # TODO: Swap it with first unsorted item
-                # new minimume is set to item[j]s's vale
-                # item[i + 1] is set to old min
-                min, items[i + 1] = items[j], min
-                # first index is change to minimum value
-                items[0] = min
-                print(items)
+        for i in range(len(items)):
+            # creates min index
+            min_index = 1
+            for j in range(i + 1, len(items)):
+                # if item's value is lower than min
+                if items[j] < items[min_index]:
+                    # add 1 to min
+                    min_index = j
+                    # TODO: Swap it with first unsorted item
+                    items[i], items[min_index] = items[min_index], items[i] 
     return items
 
 
@@ -66,14 +62,21 @@ def insertion_sort(items):
     TODO: Running time: ??? Why and under what conditions?
     TODO: Memory usage: ??? Why and under what conditions?"""
     # TODO: Repeat until all items are in sorted order
+    # while is_sorted(items) == False:
     # TODO: Take first unsorted item
-    # TODO: Insert it in sorted order in front of items
+    for i in range(len(items)):
+        for j in range(len(items) - 1):
+            if items[j + 1] < items[j]:
+                # TODO: Insert it in sorted order in front of items
+                items.insert(0, items[j + 1])
+                items.pop(j + 1)
+    return items
 
-test = [3, 0, 1, -5]
-print(selection_sort(test))
+test = [3, -1, 1, -5]
+print(insertion_sort(test))
 # this is used to track our memory usage
 tracemalloc.start()
-selection_sort(test)
+insertion_sort(test)
 current, peak = tracemalloc.get_traced_memory()
 print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
 tracemalloc.stop()
