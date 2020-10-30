@@ -20,7 +20,7 @@ def is_sorted(items):
 def bubble_sort(items):
     """Sort given items by swapping adjacent items that are out of order, and
     repeating until all items are in sorted order.
-    TODO: Running time: O(n)^2 due to nested for loop and dependency of length of list
+    TODO: Running time: O(n)^2+2 due to nested for loop and dependency of length of list
     TODO: Memory usage: Peak of 9.6e-05MB using short array length of 4"""
     # TODO: Repeat until all items are in sorted order
     while is_sorted(items) == False:
@@ -38,7 +38,7 @@ def bubble_sort(items):
 def selection_sort(items):
     """Sort given items by finding minimum item, swapping it with first
     unsorted item, and repeating until all items are in sorted order.
-    TODO: Running time: O(n)^2 due to nested for loop and dependency of length of list
+    TODO: Running time: O(n)^2+2 due to nested for loop and dependency of length of list
     TODO: Memory usage: Peak of 9.6e-05MB using short array length of 4"""
     # TODO: Repeat until all items are in sorted order
     while is_sorted(items) == False:
@@ -59,7 +59,7 @@ def selection_sort(items):
 def insertion_sort(items):
     """Sort given items by taking first unsorted item, inserting it in sorted
     order in front of items, and repeating until all items are in order.
-    TODO: Running time: ??? Why and under what conditions?
+    TODO: Running time: O(n)^2+2 due to nested for loop and dependency of length of list
     TODO: Memory usage: Peak of 9.6e-05MB using short array length of 4"""
     # TODO: Repeat until all items are in sorted order
     while is_sorted(items) == False:
@@ -75,6 +75,7 @@ def insertion_sort(items):
                     items.pop(j + 2)
     return items
 
+# TEST SECTION
 test = [3, -1, -2, -5]
 print(insertion_sort(test))
 # this is used to track our memory usage
