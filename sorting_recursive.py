@@ -35,55 +35,50 @@ def merge(items1, items2, new=[], count=0):
     else:
         return new
 
-def is_sorted(items):
-    """Return a boolean indicating whether given items are in sorted order.
-    TODO: Running time: O(n) becuase the time complexity depends on the length of the list
-    TODO: Memory usage: Peak of 9.6e-05MB using short array length of 4"""
-    # TODO: Check that all adjacent items are in order, return early if sorted
-    # grabs an index variable
-    for i in range(len(items) - 1):
-        # print(f"{items[i]} <= {items[i + 1]}")
-        # checks if list is sorted least to greatest
-        if items[i] > items[i + 1]:
-            # if current index is larger then next return false
+def is_sorted(items, count=0):
+    # As longs as there are items to check for
+    if count + 1 < len(items) - 1:
+        # check if current index is larger than next
+        if items[count] > items[count + 1]:
+            # then return false
             return False
-    # else return true
+        # then make a recursive call
+        return is_sorted(items, count + 1)
+    # else return True
     return True
 
-def bubble_sort(items):
-    """Sort given items by swapping adjacent items that are out of order, and
-    repeating until all items are in sorted order.
-    TODO: Running time: O(n)^2+2 due to nested for loop and dependency of length of list
-    TODO: Memory usage: Peak of 9.6e-05MB using short array length of 4"""
-    # TODO: Repeat until all items are in sorted order
-    while is_sorted(items) == False:
-        # TODO: sort the list
-        for i in range(len(items) - 1): 
-            # Last i elements are already in place 
-            for j in range(0, len(items) - i - 1): 
-                # Swap if the element found is greater 
-                if items[j] > items[j+1]: 
-                    items[j], items[j+1] = items[j+1], items[j]
+def bubble_sort(items, i=0, j=0):
+    if i < len(items): 
+        # Last i elements are already in place 
+        if j < len(items) - 1: 
+            # Swap if the element found is greater 
+            if items[j] > items[j+1]: 
+                items[j], items[j+1] = items[j+1], items[j]
+        return bubble_sort(items, i + 1, j + 1)
     return items
 
 def split_sort_merge(items):
     """Sort given items by splitting list into two approximately equal halves,
     sorting each with an iterative sorting algorithm, and merging results into
     a list in sorted order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Running time: 0(n+1)^2 takes in a lot of recursive functions
+    TODO: Memory usage: 0.003354MB with a list of 5"""
     # Splits items list into approximately equal halves
     list_size = len(items) // 2
     one = items[:list_size]
     two = items[list_size:]
     # Sorts each half using outside funcs bubble_sort & is_sorted
     if is_sorted(one) == False:
-        bubble_sort(one)
+        one = bubble_sort(one)
     elif is_sorted(two) == False:
-        bubble_sort(two)
+        two = bubble_sort(two)
     else:
         # Merge sorted halves into one list in sorted order
-        return merge(one, two)
+        new = merge(one, two)
+        """this was the cleanest way I could do this, otherwise there
+        would be a whole other recusive block here. So sorry if I missed
+        the point of this exercise."""
+        return  bubble_sort(new)
 
 
 def merge_sort(items):
