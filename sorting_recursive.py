@@ -1,15 +1,70 @@
 #!python
+import tracemalloc
 
-
-def merge(items1, items2):
+def merge(items1, items2, new=[], count=0):
     """Merge given lists of items, each assumed to already be in sorted order,
     and return a new list containing all items in sorted order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Repeat until one list is empty
-    # TODO: Find minimum item in both lists and append it to new list
-    # TODO: Append remaining items in non-empty list to new list
+    TODO: Running time: 0(n) using a recursive function reliant on array sizes.
+    TODO: Memory usage: Peak of 0.00205MB With a list size of 6"""
+    # first we need to count each item in each list.
+    if len(items1) >= len(items2):
+        # so we collect the larger lists len and set it to list_size
+        list_size = len(items1) -  1
+    else:
+        list_size = len(items2) - 1
 
+    # checks if one of the lists is out of items
+    if len(items1) - 1 < count:
+        # then adds the remaining items of the other list to 'new'
+        new.append(items2[count])
+    elif len(items2) - 1 < count:
+        new.append(items1[count])
+    else:
+        # check if one value is higher than another   
+        if items1[count] <= items2[count]:
+            # and append those items to the new list
+            new.append(items1[count])
+            new.append(items2[count])
+        else:
+            new.append(items2[count])
+            new.append(items1[count])
+
+    if list_size != count:
+        # then recall the function, so that all items are added
+        return merge(items1, items2, new, count + 1)
+    else:
+        return new
+
+def is_sorted(items):
+    """Return a boolean indicating whether given items are in sorted order.
+    TODO: Running time: O(n) becuase the time complexity depends on the length of the list
+    TODO: Memory usage: Peak of 9.6e-05MB using short array length of 4"""
+    # TODO: Check that all adjacent items are in order, return early if sorted
+    # grabs an index variable
+    for i in range(len(items) - 1):
+        # print(f"{items[i]} <= {items[i + 1]}")
+        # checks if list is sorted least to greatest
+        if items[i] > items[i + 1]:
+            # if current index is larger then next return false
+            return False
+    # else return true
+    return True
+
+def bubble_sort(items):
+    """Sort given items by swapping adjacent items that are out of order, and
+    repeating until all items are in sorted order.
+    TODO: Running time: O(n)^2+2 due to nested for loop and dependency of length of list
+    TODO: Memory usage: Peak of 9.6e-05MB using short array length of 4"""
+    # TODO: Repeat until all items are in sorted order
+    while is_sorted(items) == False:
+        # TODO: sort the list
+        for i in range(len(items) - 1): 
+            # Last i elements are already in place 
+            for j in range(0, len(items) - i - 1): 
+                # Swap if the element found is greater 
+                if items[j] > items[j+1]: 
+                    items[j], items[j+1] = items[j+1], items[j]
+    return items
 
 def split_sort_merge(items):
     """Sort given items by splitting list into two approximately equal halves,
@@ -17,9 +72,18 @@ def split_sort_merge(items):
     a list in sorted order.
     TODO: Running time: ??? Why and under what conditions?
     TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Split items list into approximately equal halves
-    # TODO: Sort each half using any other sorting algorithm
-    # TODO: Merge sorted halves into one list in sorted order
+    # Splits items list into approximately equal halves
+    list_size = len(items) // 2
+    one = items[:list_size]
+    two = items[list_size:]
+    # Sorts each half using outside funcs bubble_sort & is_sorted
+    if is_sorted(one) == False:
+        bubble_sort(one)
+    elif is_sorted(two) == False:
+        bubble_sort(two)
+    else:
+        # Merge sorted halves into one list in sorted order
+        return merge(one, two)
 
 
 def merge_sort(items):
@@ -57,3 +121,13 @@ def quick_sort(items, low=None, high=None):
     # TODO: Check if list or range is so small it's already sorted (base case)
     # TODO: Partition items in-place around a pivot and get index of pivot
     # TODO: Sort each sublist range by recursively calling quick sort
+
+# TEST SECTION
+test = [1, 5, 3, 9, 7]
+test2 = [2, 4, 6, 7, 8, 10]
+# this is used to track our memory usage
+tracemalloc.start()
+print(split_sort_merge(test))
+current, peak = tracemalloc.get_traced_memory()
+print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
+tracemalloc.stop()
