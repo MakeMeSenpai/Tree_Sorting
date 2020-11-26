@@ -80,16 +80,52 @@ def split_sort_merge(items):
         the point of this exercise."""
         return  bubble_sort(new)
 
-
 def merge_sort(items):
     """Sort given items by splitting list into two approximately equal halves,
     sorting each recursively, and merging results into a list in sorted order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Check if list is so small it's already sorted (base case)
-    # TODO: Split items list into approximately equal halves
-    # TODO: Sort each half by recursively calling merge sort
-    # TODO: Merge sorted halves into one list in sorted order
+    TODO: Running time: 0(n) becuase no nested loops
+    TODO: Memory usage: 0.000938MB for list size of 5"""
+    if len(items) > 1:
+ 
+        # Finding the mid of the array
+        split = len(items)//2
+ 
+        # Dividing the array elements
+        L = items[:split]
+ 
+        # into 2 halves
+        R = items[split:]
+ 
+        # Sorting the first half
+        merge_sort(L)
+ 
+        # Sorting the second half
+        merge_sort(R)
+ 
+        i = j = k = 0
+ 
+        # Copy data to temp arrays L[] and R[]
+        while i < len(L) and j < len(R):
+            if L[i] < R[j]:
+                items[k] = L[i]
+                i += 1
+            else:
+                items[k] = R[j]
+                j += 1
+            k += 1
+ 
+        # Checking if any element was left
+        while i < len(L):
+            items[k] = L[i]
+            i += 1
+            k += 1
+ 
+        while j < len(R):
+            items[k] = R[j]
+            j += 1
+            k += 1
+    # couldn't figure out how to do recursively
+    return items
 
 
 def partition(items, low, high):
@@ -104,7 +140,6 @@ def partition(items, low, high):
     # TODO: Move items less than pivot into front of range [low...p-1]
     # TODO: Move items greater than pivot into back of range [p+1...high]
     # TODO: Move pivot item into final position [p] and return index p
-
 
 def quick_sort(items, low=None, high=None):
     """Sort given items in place by partitioning items in range `[low...high]`
@@ -122,7 +157,7 @@ test = [1, 5, 3, 9, 7]
 test2 = [2, 4, 6, 7, 8, 10]
 # this is used to track our memory usage
 tracemalloc.start()
-print(split_sort_merge(test))
+print(merge_sort(test))
 current, peak = tracemalloc.get_traced_memory()
 print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
 tracemalloc.stop()
