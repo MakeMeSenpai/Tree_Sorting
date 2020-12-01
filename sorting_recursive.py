@@ -130,16 +130,38 @@ def merge_sort(items):
 
 def partition(items, low, high):
     """Return index `p` after in-place partitioning given items in range
-    `[low...high]` by choosing a pivot (TODO: document your method here) from
-    that range, moving pivot into index `p`, items less than pivot into range
+    `[low...high]` by choosing a pivot (chose Median-of-Three because it was
+    most optimal, along with the lomuto partial algorithm) from that range,
+    moving pivot into index `p`, items less than pivot into range 
     `[low...p-1]`, and items greater than pivot into range `[p+1...high]`.
     TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Choose a pivot any way and document your method in docstring above
-    # TODO: Loop through all items in range [low...high]
-    # TODO: Move items less than pivot into front of range [low...p-1]
-    # TODO: Move items greater than pivot into back of range [p+1...high]
-    # TODO: Move pivot item into final position [p] and return index p
+    TODO: Memory usage: Peak was 0.000458MB using array length of 6"""
+    # choose a pivot point
+    midean = (low + high) // 2
+    if items[midean] < items[low]:
+        # swap items[low] with items[midean]
+        items[low], items[midean] = items[midean], items[low]
+    if items[high] < items[low]:
+        # swap items[low] with items[high]
+        items[low], items[high] = items[high], items[low]
+    if items[midean] < items[high]:
+        # swap items[mid] with items[hi]
+        items[midean], items[high] = items[high], items[midean]
+    pivot = items[high]
+
+    # Loop through all items in range [low...high]
+    i = low
+    for j in range(low, high):
+        # Move items less than pivot into front of range [low...p-1]
+        if items[j] < pivot:
+            # swap items[i] with items[j]
+            items[i], items[j] = items[j], items[i]
+            i = i + 1
+        # Move pivot item into final position [p] and return index p
+        # swap items[i] with items[high]
+        items[i], items[high] = items[high], items[i]
+    # print(items)
+    return i
 
 def quick_sort(items, low=None, high=None):
     """Sort given items in place by partitioning items in range `[low...high]`
@@ -147,17 +169,39 @@ def quick_sort(items, low=None, high=None):
     TODO: Best case running time: ??? Why and under what conditions?
     TODO: Worst case running time: ??? Why and under what conditions?
     TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Check if high and low range bounds have default values (not given)
-    # TODO: Check if list or range is so small it's already sorted (base case)
-    # TODO: Partition items in-place around a pivot and get index of pivot
-    # TODO: Sort each sublist range by recursively calling quick sort
+    # Check if list or range is so small it's already sorted (base case)
+    if len(items) <= 1:
+        return items
+    # Partition items in-place around a pivot and get index of pivot
+    p = partition(items, low, high)
+    # Sort each sublist range by recursively calling quick sort
+    quick_sort(items, low, p-1)
+    quick_sort(items, p+1, high)
+
+""" my attempt at returning a list """
+# def quick_sort(items, low=None, high=None):
+#     # created to return list
+#     new_list = []
+
+#     # Check if high and low range bounds have default values (not given)
+#     if low == None and high == None:
+#         low = 0
+#         high = len(items) - 1
+
+#     # calls quick sort
+#     for i in range(high):
+#         new_list.append(quick_sorter(items, low, high))
+    
+#     # returns our list
+#     return new_list
+            
 
 # TEST SECTION
 test = [1, 5, 3, 9, 7]
 test2 = [2, 4, 6, 7, 8, 10]
 # this is used to track our memory usage
 tracemalloc.start()
-print(merge_sort(test))
+print(quick_sort(test, 0, 4))
 current, peak = tracemalloc.get_traced_memory()
 print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
 tracemalloc.stop()
