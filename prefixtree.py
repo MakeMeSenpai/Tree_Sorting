@@ -45,6 +45,27 @@ class PrefixTree:
         """Insert the given string into this prefix tree."""
         # TODO
 
+        current = self.root
+        #"h e l l o"
+        for i in range(len(string)):
+
+          #if current does not have children:
+            #insert new node with current #char in string
+            #create a new node
+            #add it as a child of current node
+          #if there is a child the child is the letter of the string
+          #current = that child
+        #when I'm at the end of the string I want to make the last character terminal
+          print(string[i])
+          if not current.has_child(string[i]):
+            new_node = PrefixTreeNode(string[i])
+            current.add_child(string[i],new_node)
+            print("Current", current)
+          current = current.get_child(string[i])
+          print("Change to next")
+        print("End", current)
+        current.terminal = True
+
     def _find_node(self, string):
         """Return a pair containing the deepest node in this prefix tree that
         matches the longest prefix of the given string and the node's depth.
@@ -55,7 +76,15 @@ class PrefixTree:
             return self.root, 0
         # Start with the root node
         node = self.root
+        depth = 0
         # TODO
+        for letter in string:
+
+          if node.has_child(letter):
+            node = node.get_child(letter)
+            depth += 1
+
+        return node, depth
 
     def complete(self, prefix):
         """Return a list of all strings stored in this prefix tree that start
@@ -63,6 +92,18 @@ class PrefixTree:
         # Create a list of completions in prefix tree
         completions = []
         # TODO
+
+        #get that node object using find prefix node
+        node = self._find_node(prefix)[0]
+
+        #if it's terminal the just append that prefix to completions list
+
+        #if not terminal we need to traverse
+        #for every child of this node
+        #get a child node of this node
+
+        #use traverse on the child with the prefix + , completions.append
+        self._traverse(child, prefix + child.character, completion.append)
 
     def strings(self):
         """Return a list of all strings stored in this prefix tree."""
@@ -75,6 +116,18 @@ class PrefixTree:
         Start at the given node with the given prefix representing its path in
         this prefix tree and visit each node with the given visit function."""
         # TODO
+        #if the node is terminal 
+        #call visit
+        if node.is_terminal():
+          visit(prefix)
+
+        #if the node has children (can be terminal AND have childen) we need to 
+        #we need to loop children
+        #call traverse on the children
+        if len(node.children > 0):
+          for child in node.children:
+            self._traverse(child, prefix+child.character, visit)
+
 
 
 def create_prefix_tree(strings):
