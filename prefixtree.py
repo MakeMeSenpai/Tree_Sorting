@@ -35,17 +35,11 @@ class PrefixTree:
 
     def is_empty(self):
         """Return True if this prefix tree is empty (contains no strings)."""
-        # TODO ?
-        if self.contains:
-            return False
-        return True
+        return self.size == 0
 
     def contains(self, string):
         """Return True if this prefix tree contains the given string."""
-        # TODO ?
-        if self.insert == string:
-            return True
-        return False
+        return self.root == string
 
     def insert(self, string):
         """Insert the given string into this prefix tree."""
@@ -93,38 +87,42 @@ class PrefixTree:
         with the given prefix string."""
         # Create a list of completions in prefix tree
         completions = []
-        # TODO
 
         #get that node object using find prefix node
         node = self._find_node(prefix)[0]
 
-        #if it's terminal the just append that prefix to completions list
-
+        #if it's terminal then just append that prefix to completions list
+        if node.terminal == True:
+            completions.append(node)
         #if not terminal we need to traverse
-        #for every child of this node
-        #get a child node of this node
-
-        #use traverse on the child with the prefix + , completions.append
-        self._traverse(child, prefix + child.character, completion.append)
+        else:
+            # for every child of this node
+            for child in node.children:
+                #get a child node of this node
+                #use traverse on the child with the prefix + , completions.append
+                self._traverse(child, prefix + child.character, completions.append)
 
     def strings(self):
         """Return a list of all strings stored in this prefix tree."""
         # Create a list of all strings in prefix tree
         all_strings = []
-        # TODO
+        for i in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            string = self.complete(i)
+            all_strings.append(string)
+        
+        return all_strings
 
     def _traverse(self, node, prefix, visit):
         """Traverse this prefix tree with recursive depth-first traversal.
         Start at the given node with the given prefix representing its path in
         this prefix tree and visit each node with the given visit function."""
-        # TODO
         #if the node is terminal 
         #call visit
         if node.is_terminal():
           visit(prefix)
 
         #if the node has children (can be terminal AND have childen) 
-        if len(node.children > 0):
+        if len(node.children) > 0:
           #we need to loop children
           for child in node.children:
             #call traverse on the children
@@ -178,20 +176,33 @@ def main():
     strings = ['ABC', 'ABD', 'A', 'XYZ']
     create_prefix_tree(strings)
 
-    # Create a dictionary of tongue-twisters with similar words to test with
+    # toungue_twisters test
     tongue_twisters = {
         'Seashells': 'Shelly sells seashells by the sea shore'.split(),
-        # 'Peppers': 'Peter Piper picked a peck of pickled peppers'.split(),
-        # 'Woodchuck': ('How much wood would a wood chuck chuck'
-        #                ' if a wood chuck could chuck wood').split()
+        'Peppers': 'Peter Piper picked a peck of pickled peppers'.split(),
+        'Woodchuck': ('How much wood would a wood chuck chuck'
+        ' if a wood chuck could chuck wood').split()
     }
-    # Create a prefix tree with the similar words in each tongue-twister
+
     for name, strings in tongue_twisters.items():
         print(f'{name} tongue-twister:')
         create_prefix_tree(strings)
         if len(tongue_twisters) > 1:
             print('\n' + '='*80 + '\n')
 
+    # my dict
+    my_dict = {
+        'one': 'choose goose whose couscous is the duce with lots of booze'.split(),
+        'two': 'For what use is a yellow brick road in a world without color'.split(),
+        'three': ('Walmart China Petroleom Amazon PetroChina Apple CVS Health Royal'
+        ' Dutch Shell incorporated').split(),
+    }
+
+    for name, strings in my_dict.items():
+        print(f'{name} my_dict:')
+        create_prefix_tree(strings)
+        if len(my_dict) > 1:
+            print('\n' + '='*80 + '\n')
 
 if __name__ == '__main__':
     main()
