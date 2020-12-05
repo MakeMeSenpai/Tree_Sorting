@@ -35,34 +35,37 @@ class PrefixTree:
 
     def is_empty(self):
         """Return True if this prefix tree is empty (contains no strings)."""
-        # TODO
+        # TODO ?
+        if self.contains:
+            return False
+        return True
 
     def contains(self, string):
         """Return True if this prefix tree contains the given string."""
-        # TODO
+        # TODO ?
+        if self.insert == string:
+            return True
+        return False
 
     def insert(self, string):
         """Insert the given string into this prefix tree."""
-        # TODO
-
         current = self.root
         #"h e l l o"
         for i in range(len(string)):
-
+          print(string[i])
           #if current does not have children:
+          if not current.has_child(string[i]):
             #insert new node with current #char in string
             #create a new node
-            #add it as a child of current node
-          #if there is a child the child is the letter of the string
-          #current = that child
-        #when I'm at the end of the string I want to make the last character terminal
-          print(string[i])
-          if not current.has_child(string[i]):
             new_node = PrefixTreeNode(string[i])
+            #add it as a child of current node
             current.add_child(string[i],new_node)
             print("Current", current)
+          #if there is a child the child is the letter of the string
+          #current = that child
           current = current.get_child(string[i])
           print("Change to next")
+        #when I'm at the end of the string I want to make the last character terminal
         print("End", current)
         current.terminal = True
 
@@ -77,7 +80,6 @@ class PrefixTree:
         # Start with the root node
         node = self.root
         depth = 0
-        # TODO
         for letter in string:
 
           if node.has_child(letter):
@@ -121,11 +123,11 @@ class PrefixTree:
         if node.is_terminal():
           visit(prefix)
 
-        #if the node has children (can be terminal AND have childen) we need to 
-        #we need to loop children
-        #call traverse on the children
+        #if the node has children (can be terminal AND have childen) 
         if len(node.children > 0):
+          #we need to loop children
           for child in node.children:
+            #call traverse on the children
             self._traverse(child, prefix+child.character, visit)
 
 
